@@ -1,0 +1,49 @@
+# ==========================
+# Go build & dependencies
+# ==========================
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build output
+*.test
+*.out
+
+# Build directory
+/bin/
+/build/
+/dist/
+
+# Go vendor & modules cache
+vendor/
+*.mod
+*.sum
+
+# ==========================
+# Config & Secrets
+# ==========================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# ==========================
+# Logs & Runtime
+# ==========================
+*.log
+*.pid
+*.seed
+*.bak
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
