@@ -9,18 +9,18 @@ import (
 )
 
 func SeedRoles(db *gorm.DB) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte("admin123"), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte("admin123"), 8)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to hash password")
 	}
 
 	admin := model.User{
-		Name:    "Valeant",
-		Email:   "valeant@example.com",
+		Name:    "rizzz",
+		Email:   "rizq.syafriano@gmail.com",
 		Password: string(bytes),
 	}
 
-	if err := db.FirstOrCreate(&admin, model.User{Email: "valeant@example.com"}).Error; err != nil {
+	if err := db.FirstOrCreate(&admin, model.User{Email: "rizq.syafriano@gmail.com"}).Error; err != nil {
 		log.Fatal().Err(err).Msg("failed to seed user")
 	} else {
 		log.Info().Msg("user seeded")
