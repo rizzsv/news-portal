@@ -11,7 +11,7 @@ import (
 
 type Jwt interface {
 	GenerateToken(data *entity.JwtData) (string, int64, error)
-	verifyToken(token string) (*entity.JwtData, error)
+	VerifyToken(token string) (*entity.JwtData, error)
 }
 
 type Options struct {
@@ -33,7 +33,7 @@ func (o *Options) GenerateToken(data *entity.JwtData) (string, int64, error) {
 	return accesToken, expiresAt.Unix(), nil
 }
 
-func (o *Options) verifyToken(token string) (*entity.JwtData, error) {
+func (o *Options) VerifyToken(token string) (*entity.JwtData, error) {
 	parsedToken, err := jwt.Parse(token, func(t*jwt.Token)(interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
