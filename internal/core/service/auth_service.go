@@ -9,9 +9,7 @@ import (
 	"news-portal/lib/conv"
 	"strconv"
 	"time"
-
-	"github.com/gofiber/fiber/v2/log"
-	"github.com/golang-jwt/jwt/v4"
+    "github.com/gofiber/fiber/v2/log"
 	"github.com/golang-jwt/jwt/v5"
 )
 

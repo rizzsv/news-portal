@@ -4,6 +4,9 @@ import (
 	"context"
 	"log"
 	"news-portal/config"
+	"news-portal/internal/adapter/handler"
+	"news-portal/internal/adapter/repository"
+	"news-portal/internal/core/service"
 	"news-portal/lib/auth"
 	"news-portal/lib/middleware"
 	"news-portal/lib/pagination"
@@ -23,6 +26,7 @@ import (
 func RunServer() {
 
 	cfg, err := config.LoadConfig(".")
+	db, err := cfg.ConnectionPostgres()
 	if err != nil {
 		log.Fatal("[RunServer-1] Failed to load config")
 	}
@@ -41,10 +45,19 @@ func RunServer() {
 	}
 	_ = s3.NewFromConfig(cdfR2)
 
-	_ = auth.NewJwt(cfg)
+	jwt := auth.NewJwt(cfg)
 	_ = middleware.NewMiddleware(cfg)
 
 	_ = pagination.NewPagination()
+
+	// Repo
+	authRepo := repository.NewAuthRepository(db.DB)
+
+	// Service
+	authService := service.NewAuthService(authRepo, cfg, jwt)
+
+	// Handler
+	authHandler := handler.NewAuthHandler(authService)
 
 	app := fiber.New()
 	app.Use(cors.New())
@@ -52,7 +65,10 @@ func RunServer() {
 	app.Use(logger.New(logger.Config{
 		Format: "[${time}] %{ip} %{status} - %{latency} %{method} %{path}\n",
 	}))
-	
+
+	api := app.Group("/api")
+	api.Post("/login", authHandler.Login)
+
 	_ = app.Group("/api")
 
 	go func() {

@@ -40,6 +40,6 @@ func (a *authRepository) GetUserByEmail(ctx context.Context, req entity.LoginReq
 	return &resp, nil
 }
 
-func NewAuthReposiry(db *gorm.DB) AuthRepository {
+func NewAuthRepository(db *gorm.DB) AuthRepository {
 	return &authRepository{db: db}
 }
