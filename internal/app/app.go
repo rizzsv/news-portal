@@ -63,7 +63,7 @@ func RunServer() {
 	app.Use(cors.New())
 	app.Use(recover.New())
 	app.Use(logger.New(logger.Config{
-		Format: "[${time}] %{ip} %{status} - %{latency} %{method} %{path}\n",
+		Format: "[${time}] ${ip} ${status} - ${latency} ${method} ${path} \n",
 	}))
 
 	api := app.Group("/api")
