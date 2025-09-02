@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"news-portal/config"
 	"news-portal/internal/adapter/repository"
 	"news-portal/internal/core/domain/entity"
@@ -9,7 +10,8 @@ import (
 	"news-portal/lib/conv"
 	"strconv"
 	"time"
-    "github.com/gofiber/fiber/v2/log"
+
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -32,12 +34,16 @@ func (a *authService) GetUserByEmail(ctx context.Context, req entity.LoginReques
 	if err != nil {
 		code = "[SERVICE] GetUserByEmail: - 1 "
 		log.Errorw(code, err)
-		return nil, err
+
+		if err.Error() == "Invalid Password" {
+			return nil, err
+		}
 	}
 
 	if checkPass := conv.CheckPasswordHash(req.Password, result.Password); !checkPass {
 		code = "[SERVICE] GetUserByEmail: - 2 "
-		log.Errorw(code, "Invalid Password")
+		err = errors.New("invalid password")
+		log.Errorw(code, err)
 		return nil, err
 	}
 

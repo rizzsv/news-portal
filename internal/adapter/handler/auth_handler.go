@@ -29,30 +29,38 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 	req := request.LoginRequest{}
 	resp := response.SuccessAuthResponse{}
 
-	if err = c.BodyParser((&req)); err != nil {
+	if err = c.BodyParser(&req); err != nil {
 		code = "[HANDLER] Login - 1"
 		log.Errorw(code, err)
 		errorResp.Meta.Status = false
 		errorResp.Meta.Message = err.Error()
-
 		return c.Status(fiber.StatusBadRequest).JSON(errorResp)
 	}
+
 	if err = validate.Struct(req); err != nil {
-		code = "[HANDLER] Login - 1"
+		code = "[HANDLER] Login - 2"
 		log.Errorw(code, err)
 		errorResp.Meta.Status = false
-		errorResp.Meta.Message = err.Error()
-
+		// Cek jika error validasi
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			var msg string
+			for _, fieldErr := range validationErrors {
+				msg += fieldErr.Field() + ": " + fieldErr.Tag() + ", "
+			}
+			errorResp.Meta.Message = "Validation failed: " + msg
+		} else {
+			errorResp.Meta.Message = err.Error()
+		}
 		return c.Status(fiber.StatusBadRequest).JSON(errorResp)
 	}
 
 	reqLogin := entity.LoginRequest{
-		Email:  req.Email,
+		Email:    req.Email,
 		Password: req.Password,
 	}
 
 	result, err := a.authService.GetUserByEmail(c.Context(), reqLogin)
-	if err!= nil {
+	if err != nil {
 		code = "[HANDLER] Login - 3"
 		log.Errorw(code, err)
 		errorResp.Meta.Status = false
@@ -65,7 +73,7 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 	resp.Meta.Message = "Login Successful"
 	resp.AccessToken = result.AccessToken
 	resp.ExpiresAt = result.ExpiresAt
-	  
+
 	return c.Status(fiber.StatusOK).JSON(resp)
 }
 
