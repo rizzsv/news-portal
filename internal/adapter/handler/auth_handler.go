@@ -67,7 +67,6 @@ func (a *authHandler) Login(c *fiber.Ctx) error {
 	resp.ExpiresAt = result.ExpiresAt
 	  
 	return c.Status(fiber.StatusOK).JSON(resp)
-	panic("unimplemented")
 }
 
 func NewAuthHandler(authService service.AuthService) AuthHandler {
