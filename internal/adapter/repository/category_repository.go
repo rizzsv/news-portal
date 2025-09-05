@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"fmt"
 	"news-portal/internal/core/domain/entity"
 	"news-portal/internal/core/domain/model"
 
@@ -54,18 +53,18 @@ func (c *categoryRepository) GetCategory(ctx context.Context) ([]entity.Category
 	var resps []entity.CategoryEntity
 	for _, val := range modelCategories {
 		resps = append(resps, entity.CategoryEntity{
-			ID:   fmt.Sprintf("%d", val.ID),
+			ID:    val.ID,
 			Title: val.Title,
 			Slug:  val.Slug,
 			User: entity.UserEntity{
-				ID:   fmt.Sprintf("%d", val.User.ID),
-				Name: val.User.Name,
-				Email: val.User.Email,
+				ID:       val.User.ID,
+				Name:     val.User.Name,
+				Email:    val.User.Email,
 				Password: val.User.Password,
 			},
 		})
 	}
-	return resps, nil
+		return resps, nil
 }
 
 // GetCategoryByID implements CategoryRepository.

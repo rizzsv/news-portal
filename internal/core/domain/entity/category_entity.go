@@ -1,7 +1,7 @@
 package entity
 
 type CategoryEntity struct {
-	ID  string
+	ID   int64
 	Title string
 	Slug  string
 	User  UserEntity

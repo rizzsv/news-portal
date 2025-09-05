@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"news-portal/internal/core/domain/entity"
 	"news-portal/internal/core/domain/model"
 
@@ -32,11 +31,12 @@ func (a *authRepository) GetUserByEmail(ctx context.Context, req entity.LoginReq
 	}
 
 	resp := entity.UserEntity{
-		ID:       fmt.Sprintf("%d", modelUser.ID),
-		Email:    modelUser.Email,
+		ID:       modelUser.ID,
 		Name:     modelUser.Name,
+		Email:    modelUser.Email,
 		Password: modelUser.Password,
-	} 
+	}
+
 	return &resp, nil
 }
 
